@@ -28,6 +28,7 @@ struct LivePhotoCleanerApp: App {
             Constants.includeIcloudImages: false,
             Constants.deleteLivePhotos: true,
             Constants.moveToAlbum: true,
+            Constants.photoLimit: 250,
         ])
     }
 
