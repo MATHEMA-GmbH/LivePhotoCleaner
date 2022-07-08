@@ -26,6 +26,7 @@ class Constants {
     static let includeIcloudImages = "includeIcloudImages"
     static let deleteLivePhotos = "deleteLivePhotos"
     static let moveToAlbum = "moveToAlbum"
+    static let photoLimit = "photoLimit"
 
     // MARK: - Strings
     static let lpcAlbumName = "Live Photo Cleaner"

@@ -18,6 +18,7 @@
 "view_appSettings_settings_delete" = "Move original images in \"Recently Deleted\" folder";
 "view_appSettings_settings_addToAlbum" = "Add to album \"LivePhotoCleaner\"";
 "view_appSettings_settings_loadICloud" = "Load photos from iCloud";
+"view_appSettings_settings_limit" = "Photo limit";
 
 "view_appSettings_photoAccess_openSettings" = "Settings";
 "view_appSettings_photoAccess_adjustSelection" = "Adjust limited photo access";

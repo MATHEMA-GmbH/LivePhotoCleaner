@@ -16,9 +16,10 @@ class ImageModel: NSObject, ObservableObject {
     var logger = Logger()
 
     var didShowiCloudAlertError = false
-    let maxImageSelectionCount = 250
 
     var duplicatedAssets = Set<String>()
+
+    @AppStorage(Constants.photoLimit) var maxImageSelectionCount = 250
 
     @Published var approxFreedSpace = 0.0
     @Published var images = [CustomImage]()
@@ -106,13 +107,19 @@ class ImageModel: NSObject, ObservableObject {
         for index in list.indices {
             list[index].selected = false
         }
+        selectedNormalItemsCount = 0
+        selectedEditedItemsCount = 0
     }
 
     private func selectAllImages(of list: inout [CustomImage]) {
         var imageSum = selectedNormalItemsCount + selectedEditedItemsCount
         for index in list.indices {
-            if maxImageSelectionCount > 0 && imageSum > maxImageSelectionCount {
-                break // alert!
+            if maxImageSelectionCount-1 > 0 && imageSum > maxImageSelectionCount-1 {
+                self.alert = AlertItem(title: "Photo Limit erreicht",
+                                       message: NSLocalizedString("Das eingestellte Foto Limit von \(maxImageSelectionCount) wurde erreicht.", comment: ""),
+                                       dismissOnly: true,
+                                       dismissButton: ("Ok", { self.alert = nil }))
+                break
             }
             selectedImages.append(list[index])
 
@@ -172,8 +179,15 @@ class ImageModel: NSObject, ObservableObject {
                     selectedNormalItemsCount += 1
                 }
             }
-
-            images[index].selected.toggle()
+            let imageSum = selectedNormalItemsCount + selectedEditedItemsCount
+            if imageSum > maxImageSelectionCount {
+                self.alert = AlertItem(title: "Photo Limit erreicht",
+                                       message: NSLocalizedString("Das eingestellte Foto Limit von \(maxImageSelectionCount) wurde erreicht.", comment: ""),
+                                       dismissOnly: true,
+                                       dismissButton: ("Ok", {self.alert = nil}))
+            } else {
+                images[index].selected.toggle()
+            }
         }
     }
 

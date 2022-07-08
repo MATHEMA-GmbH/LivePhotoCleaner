@@ -14,6 +14,8 @@ struct AppSettingsView: View {
     @EnvironmentObject var model: SettingsModel
     @State private var showLibraryPicker = false
     @Binding var isSheetVisible: Bool
+    @State private var showLimitPicker: Bool = false
+    @State private var selectedPhotoLimit: Int = UserDefaults.standard.integer(forKey: Constants.photoLimit)
 
     fileprivate func openSettingsForApp() {
         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, completionHandler: { (success) in
@@ -43,6 +45,26 @@ struct AppSettingsView: View {
                     }
                 }
                 Section(header: Text("view_appSettings_settings_section_header")) {
+                    HStack {
+                        Text("view_appSettings_settings_limit")
+                        Spacer()
+                        Text("\(selectedPhotoLimit)")
+                    }.onTapGesture {
+                        showLimitPicker.toggle()
+                    }
+
+                    if showLimitPicker {
+                        Picker(selection: $selectedPhotoLimit, label: Text("\(selectedPhotoLimit)")) {
+                            ForEach(Array(stride(from: 10, to: 501, by: 10)), id: \.self) { number in
+                                Text("\(number)")
+                            }
+                        }
+                        .onTapGesture {
+                            showLimitPicker.toggle()
+                        }
+                        .pickerStyle(.wheel)
+                    }
+
                     Toggle("view_appSettings_settings_delete", isOn: $model.deleteOriginalPhotos)
                     Toggle("view_appSettings_settings_addToAlbum", isOn: $model.moveToAlbum)
                     Toggle("view_appSettings_settings_loadICloud", isOn: $model.includeIcloudPhotos)
@@ -59,7 +81,10 @@ struct AppSettingsView: View {
                 }
             }
             .navigationBarTitle("view_appSettings_navigation_title", displayMode: .inline)
-            .navigationBarItems(trailing: Button("view_appSettings_done") { isSheetVisible = false })
+            .navigationBarItems(trailing: Button("view_appSettings_done") {
+                model.photoLimit = selectedPhotoLimit
+                isSheetVisible = false
+            })
             .background(Group {
                 if showLibraryPicker {
                     LimitedLibraryPicker(isPresented: $showLibraryPicker)

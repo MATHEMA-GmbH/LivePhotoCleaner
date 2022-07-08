@@ -16,6 +16,7 @@ class SettingsModel: ObservableObject {
     @AppStorage(Constants.includeIcloudImages) var includeIcloudPhotos = false
     @AppStorage(Constants.deleteLivePhotos) var deleteOriginalPhotos = false
     @AppStorage(Constants.moveToAlbum) var moveToAlbum = false
+    @AppStorage(Constants.photoLimit) var photoLimit = 250
 
     public var accessLevelDescription: String {
         let currentLevel: String
